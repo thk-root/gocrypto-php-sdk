@@ -1,14 +1,18 @@
 <?php
 
-	use GoCrypto\SDK\GoCrypto;
+	use GoCrypto\SDK\Db;
 	use GoCrypto\SDK\GoCryptoStaging;
 
 	require_once __DIR__ . '/src/GoCrypto.class.php';
 
-	$gc = new GoCryptoStaging('GoCrypto SDK staging test', 'https://yourshop.com/success');
+	$gc = new GoCryptoStaging(
+		new Db('HOST', 'DBNAME', 'USER', 'PASSWORD'),
+		'GoCrypto SDK staging test',
+		'https://YOUR_SERVER_NAME.com/example_return.php'
+	);
 
 	//OR, for production purposes:
-	$gc = new GoCrypto('c83aa8ac-b29a-41a6-b039-3ed5ac69acff', 'xzOOGVskFG2IeV2W3SFFFbEPC8vMDflz2k6LjrNXDCM4BFvH', false, 'GoCrypto test shop', 'https://yourshop.com/success', 'https://yourshop.com/cancel');
+	#$gc = new GoCrypto(new Db('HOST', 'DBNAME', 'USER', 'PASSWORD'), 'c83aa8ac-b29a-41a6-b039-3ed5ac69acff', 'xzOOGVskFG2IeV2W3SFFFbEPC8vMDflz2k6LjrNXDCM4BFvH', false, 'GoCrypto test shop', 'https://yourshop.com/success', 'https://yourshop.com/cancel');
 
 	//Adding items
 	$gc->addItem('Test product name 1', 'Test product description 1', 1, 10.99);
