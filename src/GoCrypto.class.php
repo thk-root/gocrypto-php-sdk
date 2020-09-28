@@ -2,8 +2,12 @@
 
 	namespace GoCrypto\SDK;
 
+	require_once __DIR__ . '/Db.class.php';
 	require_once __DIR__ . '/GoCryptoStaging.class.php';
+	require_once __DIR__ . '/GoCryptoReturn.class.php';
 
+	use Exception;
+	use PDO;
 	use Throwable;
 
 	/**
@@ -15,6 +19,12 @@
 	 * @license http://www.opensource.org/licenses/MIT The MIT License
 	 */
 	class GoCrypto {
+
+
+		/**
+		 * @var Db|null database instance
+		 */
+		private $db;
 
 
 		/**
@@ -80,6 +90,7 @@
 		/**
 		 * GoCrypto constructor
 		 *
+		 * @param Db $db
 		 * @param string $clientId
 		 * @param string $clientSecret
 		 * @param bool $useProduction
@@ -88,14 +99,18 @@
 		 * @param string|null $cancelUrl
 		 */
 		public function __construct(
+
+			Db $db,
 			string $clientId,
 			string $clientSecret,
 			bool $useProduction,
 			string $shopName,
 			string $returnUrl,
 			?string $cancelUrl = null
+
 		) {
 
+			$this->db = $db;
 			$this->clientId = $clientId;
 			$this->clientSecret = $clientSecret;
 			$this->apiUrl = $this->apiUrls[$useProduction ? 1 : 0];
@@ -335,4 +350,11 @@
 			return $this->cancelUrl;
 		}
 
+
+		/**
+		 * @return Db
+		 */
+		public function getDb() : Db {
+			return $this->db;
+		}
 	}
