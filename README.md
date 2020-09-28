@@ -10,6 +10,8 @@ Please check [GoCrypto's official website](https://gocrypto.com/en/) and their [
 
 - Handles authentication with the GoCrypto API.
 - Submits a payment request to the API.
+- Provides logic for payment response / validation.
+- Built-in nonce tokens using MySQL storage.
 - PHP 7.0 or higher.
 
 ## Installation
@@ -21,9 +23,14 @@ GoCrypto PHP SDK requires CURL and JSON extensions to be present on the system. 
 Staging example:
 
 ```php
+use GoCrypto\SDK\Db;
 use GoCrypto\SDK\GoCryptoStaging;
 
-$gc = new GoCryptoStaging('GoCrypto SDK staging test', 'https://yourshop.com/success');
+$gc = new GoCryptoStaging(
+	new Db('HOST', 'DBNAME', 'USER', 'PASSWORD'),
+	'GoCrypto SDK staging test',
+	'https://YOUR_SERVER_NAME.com/example_return.php'
+);
 $gc->addItem('Test product name 1', 'Test product description 1', 1, 10.99);
 
 echo 'Redirect client to: ' . $gc->requestPayment();
@@ -32,10 +39,18 @@ echo 'Redirect client to: ' . $gc->requestPayment();
 Production example:
 
 ```php
+use GoCrypto\SDK\Db;
 use GoCrypto\SDK\GoCrypto;
 
 //Prepare instance
-$gc = new GoCrypto('CLIENT ID', 'CLIENT SECRET', false, 'MY SHOP NAME', 'RETURN URL', 'CANCEL URL');
+$gc = new GoCrypto(
+    new Db('HOST', 'DBNAME', 'USER', 'PASSWORD'), 
+    'YOUR CLIENT ID', 
+    'YOUR CLIENT SECRET', 
+    false, 
+    'GoCrypto test shop', 
+    'https://YOUR_SERVER_NAME.com/example_return.php'
+);
 
 //Add items to purchase (EAN and feeable part can be provided here as well)
 $gc->addItem('Test product name 1', 'Test product description 1', 1, 10.99);
@@ -49,6 +64,24 @@ $gc->setLocale('sl');
 
 echo 'Redirect client to: ' . $gc->requestPayment();
 ```
+
+You must configure your MySQL database accordingly:
+```sql
+CREATE TABLE `payment_nonce` (
+  `id` bigint UNSIGNED NOT NULL,
+  `token` varchar(255) CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL,
+  `expires` int UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+ALTER TABLE `payment_nonce` ADD PRIMARY KEY (`id`);--
+ALTER TABLE `payment_nonce` MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+```
+
+If you want to modify table name to anything else, you can do it as constructed below:
+```php
+new Db('HOST', 'DBNAME', 'USER', 'PASSWORD', 'PAYMENT_NONCE_STORE_TABLE_NAME');
+```
+(obviously don't forget to change the table name in database)
 
 ## License
 
