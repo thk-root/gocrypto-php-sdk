@@ -2,6 +2,8 @@
 
 	namespace GoCrypto\SDK;
 
+	require_once __DIR__ . '/GoCryptoStaging.class.php';
+
 	use Throwable;
 
 	/**
