@@ -65,6 +65,16 @@ $gc->setLocale('sl');
 echo 'Redirect client to: ' . $gc->requestPayment();
 ```
 
+Response / return example:
+
+```php
+use GoCrypto\SDK\Db;
+use GoCrypto\SDK\GoCryptoReturn;
+
+$r = new GoCryptoReturn(new Db('HOST', 'DBNAME', 'USER', 'PASSWORD'));
+echo $r->isValid() ? 'Payment was successful' : 'Payment was unsuccessful';
+````
+
 You must configure your MySQL database accordingly:
 ```sql
 CREATE TABLE `payment_nonce` (
