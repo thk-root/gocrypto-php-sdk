@@ -148,6 +148,20 @@
 			$token = $this->getAuthToken();
 			if(empty($token)) return null;
 
+			try {
+
+				$returnToken = bin2hex(random_bytes(126));
+
+				//Store the token
+				if(!$this->storeToken($returnToken)) {
+					throw new Exception('Token could not be stored in the database.');
+				}
+
+			} catch(Exception $e) {
+				error_log($e);
+				return null;
+			}
+
 
 			//Build request headers
 			$headers = [
@@ -163,7 +177,7 @@
 				'shop_name' => $this->getShopName(),
 				'amount' => $this->getAmounts(),
 				'items' => $this->items,
-				'return_url' => $this->getReturnUrl(),
+				'return_url' => $this->getReturnUrl() . '?nonce=' . $returnToken,
 				'cancel_url' => $this->getCancelUrl(),
 			];
 
@@ -176,6 +190,31 @@
 
 			//We need to output only the URL to which client must be redirected in order to complete payment
 			return $res['data']['redirect_url'];
+		}
+
+
+		/**
+		 * Stores nonce token
+		 *
+		 * @param string $token
+		 *
+		 * @return bool
+		 */
+		private function storeToken(string $token) : bool {
+
+			$stmt =
+				$this
+					->getDb()
+					->get()
+					->prepare(
+						'INSERT INTO `' . $this->getDb()->getStorageTbl() . '`(`token`, `expires`) VALUES (:token, :expires)'
+					);
+
+			$expiresAt = time() + 600;
+			$stmt->bindParam(':token', $token, PDO::PARAM_STR);
+			$stmt->bindParam(':expires', $expiresAt, PDO::PARAM_INT);
+
+			return $stmt->execute();
 		}
 
 
