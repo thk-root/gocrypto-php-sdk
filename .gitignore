@@ -1,0 +1,16 @@
+.phpintel/
+.well-known/
+*.swp
+/cdn
+cdn
+error_log
+/error_log
+cgi-bin
+/cgi-bin
+*.sublime-project
+*.sublime-workspace
+/.idea
+vendor
+/cache
+/logs
+.idea
