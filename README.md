@@ -1,6 +1,6 @@
-# gocrypto-php-sdk
+# GoCrypto PHP SDK
 
-> GoCrypto PHP SDK for easy integrations into your ecommerce platforms or any other assorted websites
+> GoCrypto PHP SDK for easy integration into your PHP-powered websites
 
 [![MIT License](https://img.shields.io/packagist/l/cocur/slugify.svg)](http://opensource.org/licenses/MIT)
 
@@ -83,7 +83,7 @@ CREATE TABLE `payment_nonce` (
   `expires` int UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-ALTER TABLE `payment_nonce` ADD PRIMARY KEY (`id`);--
+ALTER TABLE `payment_nonce` ADD PRIMARY KEY (`id`);
 ALTER TABLE `payment_nonce` MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 ```
 
