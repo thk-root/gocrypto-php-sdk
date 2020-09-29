@@ -186,7 +186,7 @@
 			$res = $this->post('charges', $body, $headers);
 
 			//Check success state
-			if(empty($res) || !isset($res['data']) || !isset($res['data']['access_token']) || intval($res['data']['status']) !== 1) return null;
+			if(empty($res) || !isset($res['data']) || !isset($res['data']['redirect_url'])) return null;
 
 			//We need to output only the URL to which client must be redirected in order to complete payment
 			return $res['data']['redirect_url'];
