@@ -81,7 +81,7 @@ CREATE TABLE `payment_nonce` (
   `id` bigint UNSIGNED NOT NULL,
   `token` varchar(255) CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL,
   `expires` int UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 ALTER TABLE `payment_nonce` ADD PRIMARY KEY (`id`);
 ALTER TABLE `payment_nonce` MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
